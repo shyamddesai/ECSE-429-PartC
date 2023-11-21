@@ -231,6 +231,16 @@ def projectsSetUp(URL="projects"):
 """
 Performance testing
 """
+steps = (
+    1,
+    10,
+    25,
+    50,
+    100,
+    250,
+    500,
+    1000,
+)
 
 """ADD RANDOM ENTRIES"""
 
@@ -335,9 +345,9 @@ def modifyRandomEntries(
 
 
 if __name__ == "__main__":
-    # print(len(todosGetEntries()))
-    # addRandomEntries("todos", 100, getRandomTestDataID)
-    # print(len(todosGetEntries()))
+    print(len(todosGetEntries()))
+    addRandomEntries("todos", 1000, getRandomTestDataID)
+    print(len(todosGetEntries()))
 
     # print(len(projectsGetEntries()))
     # addRandomEntries("projects", 100, generateRandomTestDataProject)
@@ -351,20 +361,20 @@ if __name__ == "__main__":
     # deleteRandomEntries("projects", 100, getRandomProjectsID)
     # print(len(projectsGetEntries()))
 
-    print(len(todosGetEntries()))
-    modifyRandomEntries(
-        "todos",
-        100,
-        getRandomTodosID,
-        getRandomTestDataID,
-    )
-    print(len(todosGetEntries()))
+    # print(len(todosGetEntries()))
+    # modifyRandomEntries(
+    #     "todos",
+    #     100,
+    #     getRandomTodosID,
+    #     getRandomTestDataID,
+    # )
+    # print(len(todosGetEntries()))
 
-    print(len(projectsGetEntries()))
-    modifyRandomEntries(
-        "projects",
-        100,
-        getRandomProjectsID,
-        generateRandomTestDataProject,
-    )
-    print(len(projectsGetEntries()))
+    # print(len(projectsGetEntries()))
+    # modifyRandomEntries(
+    #     "projects",
+    #     100,
+    #     getRandomProjectsID,
+    #     generateRandomTestDataProject,
+    # )
+    # print(len(projectsGetEntries()))
