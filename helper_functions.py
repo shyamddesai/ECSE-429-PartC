@@ -320,6 +320,20 @@ def deleteRandomEntries(
         sendRequest("DELETE", f"{URL}/{id}")
 
 
+"""Modify random entries"""
+
+
+def modifyRandomEntries(
+    URL="todos",
+    number_of_entries=10,
+    id_generator=getRandomTodosID,
+    data_generator=getRandomTestDataID,
+):
+    ids = id_generator(number_of_entries)
+    for id in ids:
+        sendRequest("PUT", f"{URL}/{id}", data=data_generator())
+
+
 if __name__ == "__main__":
     # print(len(todosGetEntries()))
     # addRandomEntries("todos", 100, getRandomTestDataID)
@@ -333,6 +347,24 @@ if __name__ == "__main__":
     # deleteRandomEntries("todos", 100, getRandomTodosID)
     # print(len(todosGetEntries()))
 
+    # print(len(projectsGetEntries()))
+    # deleteRandomEntries("projects", 100, getRandomProjectsID)
+    # print(len(projectsGetEntries()))
+
+    print(len(todosGetEntries()))
+    modifyRandomEntries(
+        "todos",
+        100,
+        getRandomTodosID,
+        getRandomTestDataID,
+    )
+    print(len(todosGetEntries()))
+
     print(len(projectsGetEntries()))
-    deleteRandomEntries("projects", 100, getRandomProjectsID)
+    modifyRandomEntries(
+        "projects",
+        100,
+        getRandomProjectsID,
+        generateRandomTestDataProject,
+    )
     print(len(projectsGetEntries()))
