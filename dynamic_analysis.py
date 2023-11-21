@@ -2,31 +2,9 @@ import time
 
 from helper_functions import *
 
-steps = (
-    1,
-    10,
-    25,
-    50,
-    100,
-    250,
-    500,
-    1000,
-    2000,
-    4000,
-    8000,
-)
-steps_delete = (
-    1,
-    10,
-    25,
-    50,
-    100,
-    250,
-    500,
-    1000,
-    2000,
-    4000,
-)
+# only modify the following two lines
+steps = (1, 10, 25, 50, 100, 250, 500, 1000, 2000, 4000, 8000)
+steps_delete = (1, 10, 25, 50, 100, 250, 500, 1000, 2000, 4000)
 
 
 def todos_add(n):
