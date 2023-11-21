@@ -243,7 +243,6 @@ steps = (
     2000,
     4000,
     8000,
-    16000,
 )
 
 """ADD RANDOM ENTRIES"""
