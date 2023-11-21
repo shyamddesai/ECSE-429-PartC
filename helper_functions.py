@@ -231,19 +231,7 @@ def projectsSetUp(URL="projects"):
 """
 Performance testing
 """
-steps = (
-    1,
-    10,
-    25,
-    50,
-    100,
-    250,
-    500,
-    1000,
-    2000,
-    4000,
-    8000,
-)
+
 
 """ADD RANDOM ENTRIES"""
 
