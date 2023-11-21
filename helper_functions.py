@@ -1,3 +1,5 @@
+import random
+import string
 import xml.dom.minidom  # For pretty printing XML
 import xml.etree.ElementTree as ET
 from pprint import pprint
@@ -70,8 +72,7 @@ def sendRequest(
     data (dict): the data to send with the request,
     payload_type (str): the type of the data to send with the request,
     """
-    headers = {"Accept": f"application/{payload_type}",
-               "Content-Type": "text/plain"}
+    headers = {"Accept": f"application/{payload_type}", "Content-Type": "text/plain"}
 
     try:
         response = requests.request(
@@ -225,3 +226,113 @@ def projectsSetUp(URL="projects"):
         return False
 
     return True
+
+
+"""
+Performance testing
+"""
+
+"""ADD RANDOM ENTRIES"""
+
+
+def generateRandomString(length):
+    """
+    generate random string of length 1 to length
+    """
+    characters = string.ascii_letters + string.digits
+    random_string = "".join(
+        random.choice(characters) for _ in range(random.randint(1, length))
+    )
+    return random_string
+
+
+def generateRandomBoolean():
+    """
+    generate random boolean
+    """
+    return random.choice([True, False])
+
+
+def getRandomTestDataID():
+    """
+    Random data generator for todos
+    """
+    return {
+        "title": generateRandomString(100),
+        "doneStatus": generateRandomBoolean(),
+        "description": generateRandomString(100),
+    }
+
+
+def generateRandomTestDataProject():
+    """
+    Random data generator for projects
+    """
+    return {
+        "title": generateRandomString(100),
+        "completed": generateRandomBoolean(),
+        "active": generateRandomBoolean(),
+        "description": generateRandomString(100),
+    }
+
+
+def addRandomEntries(
+    URL="todos",
+    number_of_entries=10,
+    data_generator=getRandomTestDataID,
+):
+    """
+    Add random entries to the database, generic function
+    """
+    for i in range(number_of_entries):
+        sendRequest("POST", URL, data=data_generator())
+
+
+"""DELETE RANDOM ENTRIES"""
+
+
+def getRandomTodosID(number_of_entries=10):
+    """
+    Get a random todos id
+    """
+    todos = todosGetEntries()
+    random.shuffle(todos)
+    return [todos[i].get("id") for i in range(number_of_entries)]
+
+
+def getRandomProjectsID(number_of_entries=10):
+    """
+    Get a random projects id
+    """
+    projects = projectsGetEntries()
+    random.shuffle(projects)
+    return [projects[i].get("id") for i in range(number_of_entries)]
+
+
+def deleteRandomEntries(
+    URL="todos", number_of_entries=10, id_generator=getRandomTodosID
+):
+    """
+    Delete random entries from the database, generic function
+    """
+    ids = id_generator(number_of_entries)
+    for id in ids:
+        sendRequest("DELETE", f"{URL}/{id}")
+
+
+if __name__ == "__main__":
+    # print(len(todosGetEntries()))
+    # addRandomEntries("todos", 100, getRandomTestDataID)
+    # print(len(todosGetEntries()))
+
+    # print(len(projectsGetEntries()))
+    # addRandomEntries("projects", 100, generateRandomTestDataProject)
+    # print(len(projectsGetEntries()))
+
+    # print(len(todosGetEntries()))
+    # deleteRandomEntries("todos", 100, getRandomTodosID)
+    # print(len(todosGetEntries()))
+
+    print(len(projectsGetEntries()))
+    deleteRandomEntries("projects", 100, getRandomProjectsID)
+    print(len(projectsGetEntries()))
