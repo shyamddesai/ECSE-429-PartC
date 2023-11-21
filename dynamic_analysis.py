@@ -104,4 +104,4 @@ if __name__ == "__main__":
             function(i)
             end = time.time()
             print(f"{i} entries: {end - start:.4f}s")
-            time.sleep(5)
+            # time.sleep(5)
