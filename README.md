@@ -68,8 +68,8 @@ PerfChecker is a comprehensive testing framework designed to conduct both **dyna
 ## Setup and Execution
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/username/PerfCheckAI
-   cd PerfCheckAI
+   git clone https://github.com/username/PerfChecker
+   cd PerfChecker
    ```
 
 2. **Run Dynamic Analysis**:
