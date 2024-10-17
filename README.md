@@ -1,38 +1,38 @@
-# Project members
-- Enlai Li 261068637
-- Shyam Desai 260947829
 
-## Roles
-- Exploratory testing: Both
-- Unit Testing (code, video): Enlai Li
-- Report (summaries, bugs): Shyam Desai
+# PerfChecker
 
-# Description
+PerfChecker is a comprehensive testing framework designed to conduct both **dynamic** and **static** software analyses, focusing on performance metrics, code quality, and maintainability. This project was developed to assess the API handling capabilities of a todo manager application, measure system performance under load, and analyze code structure for quality improvement.
 
-This folder contains one file for each API endpoint (module), and each file contains at least one unit case for each method described in the documentation, for a total of 50 unit tests.
+## Key Features
+1. **Dynamic Analysis**: 
+   - Conducts load testing by adding, modifying, and deleting objects (todos and projects) in a database.
+   - Tracks performance metrics like memory usage, CPU load, and transaction time, allowing developers to identify bottlenecks.
+   - Utilizes Windows Performance Monitor to collect detailed data at various load levels, from 1 to 8000 objects, and logs transaction impact on memory and processor utilization.
 
-## Notes
+2. **Static Analysis**:
+   - Configured with **SonarQube** and **SonarScanner** for Python code analysis.
+   - Measures code quality through cyclomatic and cognitive complexity, technical debt, and code smells.
+   - Assesses code coverage (72.3%) and identifies maintainability issues (e.g., naming conventions and unused variables).
 
-- The unittest framework already runs the tests in random order so there is no need to worry about determining order using pseudo random number generation
-- The database is wiped and filled with test value before each of the 50 unit tests in order to ensure that they can be run in any order, making each test truly independent
+3. **Comprehensive Reporting**:
+   - Performance reports visualize memory usage and CPU load as object count increases.
+   - Code quality insights highlight areas for improvement, including potential bugs, security hotspots, and maintainability suggestions.
 
+---
 
-# Capabilities
+## Capabilities
+### /todos/:id
+#### DELETE
+- Deleting an id also deletes all `taskof` and categories associated with it.
 
-## /todos/:id
+### /todos/:id/tasksof
+#### POST
+- Create a new task if no task id is specified (undocumented behavior).
+- Add a task to specified `:id`.
+- Add an existing task to `id` by specifying the task id in the body.
+- Example request for `http://localhost:4567/todos/1/tasksof`:
 
-### DELETE
-- Deleting an id also deletes all taskof and categories associated with it
-
-## /todos/:id/tasksof
-
-### POST
-- Create new task if no task id is specified (undocumented behavior)
-- Add a task to specified :id
-- Add existing task to id by specifying task id in body
-- Example request for `http://localhost:4567/todos/1/tasksof`
 ```json
-# POST body
 {
     "id": "4",
     "title": "Test Taskof Title",
@@ -40,96 +40,62 @@ This folder contains one file for each API endpoint (module), and each file cont
     "active": false,
     "description": "Test Taskof description"
 }
-
-# undocumented behavior body
-{
-    "title": "Test Taskof Title",
-    "completed": false,
-    "active": false,
-    "description": "Test Taskof description"
-}
 ```
 
-## /projects
-- Projects seem to be linked with `/todos/:id/tasksof`. Any task created will appear in projects, however deleting ids with not delete any project
-- Deleting a project will delete its categories and taskof, just like todos
+### /projects
+- Projects are linked with `/todos/:id/tasksof`. Any task created will appear in projects; however, deleting ids will not delete any project.
+- Deleting a project deletes its categories and `taskof`, just like todos.
 
 
-## /projects/:id
-## POST
-- Works the same way as PUT
+## Bugs
+#### /todos/:id/categories
+- **GET**: Returns all categories instead of specific ones for `id`.
+  
+#### /todos/:id/tasksof
+- **POST**: Duplicate IDs issue when creating new tasks with an existing ID.
 
-# Bugs
+#### /projects/:id/tasks
+- **GET**: Returns all tasks instead of filtering by `id`.
 
-## /todos/:id/categories
-### GET
-- Returns every single category even if an :id is specified, ex
-`http://localhost:4567/todos/1/categories` will return all categories even if `id = 1` was specified. This is unexpected because it was specified in the documentation that only categories for specific id will be returned
-```json
-# ID response
-{
-    "todos": [
-        {
-            "id": "20",
-            "title": "officia deserunt mol",
-            "doneStatus": "true",
-            "description": "deserunt mollit anim",
-            "categories": [
-                {
-                    "id": "8"
-                }
-            ]
-        }
-    ]
-}
+---
 
-# Category response
-{
-    "categories": [
-        {
-            "id": "8",
-            "title": "Whatever",
-            "description": "This is a description"
-        }
-    ]
-}
-```
+## Technical Stack
+- **Testing Tools**: Windows Performance Monitor for dynamic analysis, SonarQube, and SonarScanner for static analysis.
+- **Language**: Python for API load testing scripts and static analysis configuration.
+- **Database**: JSON-based todos and projects data simulation.
+- **Reporting**: Data visualized in CSV and Excel spreadsheets, with graphs for transaction time vs. memory usage and CPU load.
 
-## /todos/:id/tasksof
-### POST
-- This bug is detailed in the file `test_todos_id_taskof.py` in the function `BUGGEDtestPostWithID()`, basically when you create a new taskof with an existing taskof ID, you will find that there are 2 taskof entries with same ID, which makes no sense because ID are supposed to be unique
+## Setup and Execution
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/username/PerfCheckAI
+   cd PerfCheckAI
+   ```
 
-## /projects/:id/tasks
-### GET
-- Same problem as it's /todos counterpart, specifying id is useless because it will always return everything
+2. **Run Dynamic Analysis**:
+   - In the main project directory, execute:
+     ```bash
+     python dynamic_analysis.py
+     ```
 
-# Howto
+3. **Static Analysis**:
+   - Set up SonarQube on localhost (requires Java 17).
+   - Install SonarScanner and configure it to analyze Python code:
+     ```bash
+     sonar-scanner -Dsonar.projectKey=Python-project -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000
+     ```
+---
 
-## Running all tests at once
-To run tests, run the following command inside current directory. The python packages unittest and requests are required. This will run test from every test module
-> Linux
+## Usage
+### Running All Tests
+To run all tests:
 ```bash
-bash run_unittests.sh
-```
-> Other
-```bash
-python -m unittest discover -p "test_*.py"
+bash run_unittests.sh  # Linux
+python -m unittest discover -p "test_*.py"  # Others
 ```
 
-## Running one module at a time
-> using command-line
-
-Run the following in terminal, replace "filename.py" with the name of the python test file
+### Running One Module at a Time
+Replace "filename.py" with the name of the test file:
 ```bash
 python -m unittest discover -p "filename.py"
-# example
-python -m unittest discover -p test_todos.py
 ```
-> running files
-
-Replace everything under, and including `if __name__ == "__main__":` with:
-```python
-if __name__ == "__main__":
-    unittest.main()
-```
-Afterward, simply run the python file
